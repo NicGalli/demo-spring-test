@@ -3,11 +3,27 @@ package com.example.demo.repository;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.stereotype.Repository;
+
 import com.example.demo.model.Employee;
 
-public interface EmployeeRepository {
+@Repository
+public class EmployeeRepository {
 
-	List<Employee> findAll();
-	Optional<Employee> findById(long id);
-	Employee save(Employee employee);
+	private static final String TEMPORARY_IMPLEMENTATION = "Temporary Implementation";
+
+	public List<Employee> findAll() {
+		throw new UnsupportedOperationException(TEMPORARY_IMPLEMENTATION);
+
+	}
+
+	public Optional<Employee> findById(long id) {
+		throw new UnsupportedOperationException(TEMPORARY_IMPLEMENTATION);
+
+	}
+
+	public Employee save(Employee employee) {
+		throw new UnsupportedOperationException(TEMPORARY_IMPLEMENTATION);
+
+	}
 }
