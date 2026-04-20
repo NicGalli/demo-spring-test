@@ -2,12 +2,21 @@ package com.example.demo.service;
 
 import java.util.List;
 
+import org.springframework.stereotype.Service;
+
 import com.example.demo.model.Employee;
 
-public interface EmployeeService {
+@Service
+public class EmployeeService {
 
-	List<Employee> getAllEmployees();
-	Employee getEmployeeById(long id);
-	Employee insertNewEmployee(Employee employee);
-	Employee updateEmployeeById(long id, Employee replacement);
+	private static final String TEMPORARY_IMPLEMENTATION = "Temporary Implementation";
+
+	public List<Employee> getAllEmployees() {
+		throw new UnsupportedOperationException(TEMPORARY_IMPLEMENTATION);
+	}
+
+	public Employee getEmployeeById(long id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }
