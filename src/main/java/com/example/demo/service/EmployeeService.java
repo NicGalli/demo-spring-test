@@ -19,4 +19,14 @@ public class EmployeeService {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	public Employee insertNewEmployee(Employee employee) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public Employee updateEmployeeById(long id, Employee employee) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }
