@@ -2,11 +2,20 @@ package com.example.demo.model;
 
 import java.util.Objects;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+
+@Entity
 public class Employee {
 
+	@Id
+	@GeneratedValue
 	private Long id;
 	private String name;
 	private long salary;
+
+	public Employee() {}
 
 	public Employee(Long id, String name, long salary) {
 		this.id = id;
