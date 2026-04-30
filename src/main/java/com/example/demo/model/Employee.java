@@ -23,10 +23,6 @@ public class Employee {
 		this.salary = salary;
 	}
 
-	public void setId(Long id) {
-		this.id = id;
-	}
-
 	@Override
 	public String toString() {
 		return "Employee [id=" + id + ", name=" + name + ", salary=" + salary
@@ -53,6 +49,10 @@ public class Employee {
 
 	public String getName() {
 		return name;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	public void setName(String name) {
