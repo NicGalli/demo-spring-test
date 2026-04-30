@@ -29,6 +29,8 @@
 		<url />
 	</scm>
 	<properties>
+		<skip.unit-tests>false</skip.unit-tests>
+		<skip.integration-tests>false</skip.integration-tests>
 		<java.version>21</java.version>
 	</properties>
 	<dependencies>
@@ -110,6 +112,17 @@
 			<artifactId>selenium-support</artifactId>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>org.seleniumhq.selenium</groupId>
+			<artifactId>selenium-java</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>io.github.bonigarcia</groupId>
+			<artifactId>webdrivermanager</artifactId>
+			<version>6.3.4</version>
+			<scope>test</scope>
+		</dependency>
 	</dependencies>
 	<build>
 		<plugins>
@@ -130,6 +143,7 @@
 						<configuration>
 							<sources>
 								<source>src/it/java</source>
+								<source>src/e2e/java</source>
 							</sources>
 						</configuration>
 					</execution>
@@ -139,6 +153,7 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
 				<configuration>
+					<skipTests>${skip.unit-tests}</skipTests>
 					<includes>
 						<include>**/*Test.java</include>
 					</includes>
@@ -150,6 +165,7 @@
 				<executions>
 					<execution>
 						<configuration>
+							<skipTests>${skip.integration-tests}</skipTests>
 							<includes>
 								<include>**/*IT.java</include>
 								<include>**/*ApplicationTests.java</include>
@@ -165,5 +181,85 @@
 			</plugin>
 		</plugins>
 	</build>
-
+	<profiles>
+		<profile>
+			<id>e2e-tests</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
+			<properties>
+				<skip.unit-tests>true</skip.unit-tests>
+				<skip.integration-tests>true</skip.integration-tests>
+			</properties>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>build-helper-maven-plugin</artifactId>
+						<executions>
+							<execution>
+								<id>reserve-tomcat-port</id>
+								<goals>
+									<goal>reserve-network-port</goal>
+								</goals>
+								<phase>process-resources</phase>
+								<configuration>
+									<portNames>
+										<portName>tomcat.http.port</portName>
+									</portNames>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<groupId>org.springframework.boot</groupId>
+						<artifactId>spring-boot-maven-plugin</artifactId>
+						<executions>
+							<execution>
+								<id>pre-integration-test</id>
+								<goals>
+									<goal>start</goal>
+								</goals>
+								<configuration>
+									<arguments>
+										<argument>
+											--server.port=${tomcat.http.port}</argument>
+									</arguments>
+								</configuration>
+							</execution>
+							<execution>
+								<id>post-integration-test</id>
+								<goals>
+									<goal>stop</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-failsafe-plugin</artifactId>
+						<executions>
+							<execution>
+								<id>e2e-tests</id>
+								<configuration>
+									<includes>
+										<include>**/*E2E.java</include>
+									</includes>
+								</configuration>
+								<goals>
+									<goal>integration-test</goal>
+									<goal>verify</goal>
+								</goals>
+							</execution>
+						</executions>
+						<configuration>
+							<systemPropertyVariables>
+								<server.port>${tomcat.http.port}</server.port>
+							</systemPropertyVariables>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
 </project>
